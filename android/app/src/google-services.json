@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621900376022",
+    "project_id": "moodsync-77a62",
+    "storage_bucket": "moodsync-77a62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621900376022:android:199d5232934b8c0e1ba677",
+        "android_client_info": {
+          "package_name": "com.example.moodsync.moodsync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsI65eYSNN6QedB5XMDmGdKzyRdKsK2rs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
