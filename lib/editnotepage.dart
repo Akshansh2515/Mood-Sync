@@ -40,7 +40,8 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       final emotions = emotionDetector.detectEmotions(content);
 
       final note = Note(
-        id: widget.note?.id,
+        id: widget.note?.id ??
+            DateTime.now().toString(), // Generate a new unique ID for new notes
         title: title,
         content: content,
         timestamp: widget.note?.timestamp ?? DateTime.now(),
@@ -96,51 +97,108 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.note == null ? 'Add Note' : 'Edit Note'),
+        backgroundColor: Colors
+            .yellow.shade300, // More yellowish background color for the AppBar
       ),
+      backgroundColor: Colors.yellow
+          .shade100, // Light yellow background color for the whole screen
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.stretch, // Ensure elements take full width
               children: [
                 TextFormField(
                   controller: _titleController,
-                  decoration: const InputDecoration(labelText: 'Title'),
+                  decoration: const InputDecoration(
+                    hintText: 'Title',
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w700, // Bold weight for the title
+                      fontSize: 32, // Larger font size for the title
+                      color: Colors.black, // Color for the title text
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 12.0), // Padding for the title
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a title';
                     }
                     return null;
                   },
+                  textAlign: TextAlign.center,
                 ),
-                TextFormField(
-                  controller: _contentController,
-                  decoration: const InputDecoration(labelText: 'Content'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some content';
-                    }
-                    return null;
-                  },
-                  maxLines: 10,
-                  onChanged: (value) {
-                    final emotions = emotionDetector.detectEmotions(value);
-                    setState(() {
-                      _emotions = emotions;
-                    });
-                    _fetchSearchQuery();
-                  },
+                const SizedBox(height: 16.0),
+                Container(
+                  padding: const EdgeInsets.all(16.0), // Increased padding
+                  decoration: BoxDecoration(
+                    color: const Color(
+                        0xffeee1ff), // Dark color for the content box
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: TextFormField(
+                    controller: _contentController,
+                    decoration: const InputDecoration(
+                      hintText: 'Content',
+                      border: InputBorder.none,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some content';
+                      }
+                      return null;
+                    },
+                    maxLines: 10, // Increased number of lines
+                    style: const TextStyle(
+                      color: Colors.black, // White text color for content
+                      fontSize: 18, // Font size for the content
+                      fontWeight:
+                          FontWeight.w400, // Regular weight for the content
+                    ),
+                    onChanged: (value) {
+                      final emotions = emotionDetector.detectEmotions(value);
+                      setState(() {
+                        _emotions = emotions;
+                      });
+                      _fetchSearchQuery();
+                    },
+                  ),
                 ),
                 if (_emotions != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: _emotions!.entries
-                          .map((entry) => Text(
-                              '${entry.key}: ${entry.value.toStringAsFixed(2)}%'))
-                          .toList(),
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.orange
+                            .shade100, // Background color for the sentiment analysis box
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Sentimental Analysis',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          ..._emotions!.entries.map((entry) => Text(
+                              '${entry.key}: ${entry.value.toStringAsFixed(2)}%',
+                              style: const TextStyle(
+                                color: Colors.black, // Text color for emotions
+                                fontSize: 16, // Font size for emotions
+                                fontWeight: FontWeight
+                                    .w400, // Regular weight for emotions
+                              )))
+                        ],
+                      ),
                     ),
                   ),
                 if (_searchQuery != null)
@@ -148,7 +206,26 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: ElevatedButton(
                       onPressed: _openYouTube,
-                      child: const Text('Recommend Songs'),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.yellow
+                            .shade300, // Yellow background for the button
+                        foregroundColor:
+                            Colors.black, // Black text color for the button
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 16.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        elevation: 4.0, // Add shadow for the button
+                      ),
+                      child: const Text(
+                        'Recommend Songs',
+                        style: TextStyle(
+                          fontSize: 18, // Font size for the button text
+                          fontWeight: FontWeight
+                              .w600, // Semi-bold weight for the button text
+                        ),
+                      ),
                     ),
                   ),
               ],

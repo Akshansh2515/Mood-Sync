@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'homepage.dart';
 
 void main() {
@@ -17,6 +16,7 @@ class MoodSync extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const HomePage(),
+      debugShowCheckedModeBanner: false, // This line removes the debug banner
     );
   }
 }

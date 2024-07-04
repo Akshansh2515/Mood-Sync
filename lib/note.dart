@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 class Note {
-  int? id;
+  String? id; // Change from int? to String? for unique identifiers
   String title;
   String content;
   DateTime timestamp;

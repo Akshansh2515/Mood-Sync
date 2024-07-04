@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'note.dart';
 import 'editNotePage.dart';
 import 'noteStorage.dart';
+import 'dart:math';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +14,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final NoteStorage _noteStorage = NoteStorage();
   List<Note> _notes = [];
+  final Random _random = Random(); // Random number generator
+
+  // List of colors to choose from
+  final List<Color> _colors = [
+    Colors.lightBlueAccent.shade100, // Light Blue Accent
+    const Color(0xffeee1ff), // Lavender
+    Colors.orange.shade100, // Light Orange
+    Colors.blue.shade100, // Light Blue (Currently Used Color)
+    const Color(0xff77dd77), // Pastel Green
+    const Color(0xffaec6cf), // Pastel Blue
+    const Color(0xffffb3e6), // Pastel Pink
+    const Color(0xffe3bced), // Light Lavender
+    const Color(0xffffdab9), // Soft Peach
+    const Color(0xff98ff98), // Mint Green
+    const Color(0xfff08080),
+  ];
 
   @override
   void initState() {
@@ -51,7 +68,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notes'),
+        backgroundColor: Colors
+            .yellow.shade200, // Light yellow background color for the AppBar
       ),
+      backgroundColor: Colors.yellow
+          .shade200, // Very light yellow background color for the whole screen
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -61,6 +82,9 @@ class _HomePageState extends State<HomePage> {
         itemCount: _notes.length,
         itemBuilder: (context, index) {
           final note = _notes[index];
+          final color = _colors[_random
+              .nextInt(_colors.length)]; // Select a random color from the list
+
           return GestureDetector(
             onTap: () async {
               final updatedNote = await Navigator.push(
@@ -101,7 +125,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: index % 2 == 0 ? Colors.blue[100] : Colors.green[100],
+                color: color, // Assigning a random color for each note
                 borderRadius: BorderRadius.circular(8.0),
               ),
               padding: const EdgeInsets.all(8.0),
@@ -110,7 +134,13 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     note.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 4.0),
                   Text(
