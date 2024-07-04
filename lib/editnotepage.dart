@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'EmotionDetector.dart';
 import 'note.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AddEditNotePage extends StatefulWidget {
   final Note? note;
@@ -19,6 +20,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
   final EmotionDetector emotionDetector = EmotionDetector();
 
   Map<String, double>? _emotions;
+  String? _searchQuery;
 
   @override
   void initState() {
@@ -27,6 +29,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       _titleController.text = widget.note!.title;
       _contentController.text = widget.note!.content;
       _emotions = widget.note!.emotions;
+      _fetchSearchQuery();
     }
   }
 
@@ -37,7 +40,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       final emotions = emotionDetector.detectEmotions(content);
 
       final note = Note(
-        id: widget.note?.id ?? DateTime.now().millisecondsSinceEpoch,
+        id: widget.note?.id,
         title: title,
         content: content,
         timestamp: widget.note?.timestamp ?? DateTime.now(),
@@ -46,6 +49,45 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
 
       widget.onSave(note);
       Navigator.pop(context, note);
+    }
+  }
+
+  void _fetchSearchQuery() {
+    if (_emotions != null && _emotions!.isNotEmpty) {
+      final dominantMood =
+          _emotions!.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+      final query = 'Songs for mood $dominantMood';
+      setState(() {
+        _searchQuery = query;
+      });
+    }
+  }
+
+  Future<void> _openYouTube() async {
+    final searchQuery = _searchQuery;
+    if (searchQuery != null) {
+      final query = Uri.encodeComponent(searchQuery);
+      final url = 'https://www.youtube.com/results?search_query=$query';
+      final uri = Uri.parse(url);
+      try {
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        } else {
+          await _showErrorSnackBar('Could not open YouTube.');
+        }
+      } catch (e) {
+        await _showErrorSnackBar('Could not open YouTube: ${e.toString()}');
+      }
+    } else {
+      await _showErrorSnackBar('No search query available');
+    }
+  }
+
+  Future<void> _showErrorSnackBar(String message) async {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
     }
   }
 
@@ -82,6 +124,13 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
                     return null;
                   },
                   maxLines: 10,
+                  onChanged: (value) {
+                    final emotions = emotionDetector.detectEmotions(value);
+                    setState(() {
+                      _emotions = emotions;
+                    });
+                    _fetchSearchQuery();
+                  },
                 ),
                 if (_emotions != null)
                   Padding(
@@ -92,6 +141,14 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
                           .map((entry) => Text(
                               '${entry.key}: ${entry.value.toStringAsFixed(2)}%'))
                           .toList(),
+                    ),
+                  ),
+                if (_searchQuery != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      onPressed: _openYouTube,
+                      child: const Text('Recommend Songs'),
                     ),
                   ),
               ],
