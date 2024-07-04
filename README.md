@@ -1,6 +1,6 @@
-# Flutter Notes App
+# Mood Sync
 
-This Flutter Notes App is designed to help you create, edit, and delete notes efficiently. It includes an emotion detection feature that analyzes the content of your notes and suggests songs based on the detected emotions. The notes are displayed in a grid with pastel and soft colors randomly assigned to each note for a pleasant visual experience.
+This Flutter Journal App is designed to help you create, edit, and delete notes efficiently. It includes an emotion detection feature that analyzes the content of your notes and suggests songs based on the detected emotions. The notes are displayed in a grid with pastel and soft colors randomly assigned to each note for a pleasant visual experience.
 
 ## Features
 
@@ -46,14 +46,14 @@ This Flutter Notes App is designed to help you create, edit, and delete notes ef
     - `noteStorage.dart`: The class for handling persistent storage of notes.
     - `editNotePage.dart`: The page for adding and editing notes.
     - `EmotionDetector.dart`: The class for detecting emotions in note content.
-    - `HomePage.dart`: The home page displaying the grid of notes.
+    - `HomePage.dart`: The home page displays the grid of notes.
     - `addnotepage.dart`: The page for adding and editing notes.
-    - `note_widget.dart`: A reusable widget for displaying individual notes.
+    - `note_widget.dart`: A reusable widget displaying individual notes.
 ## Usage
 
 ### Adding a Note
 
-1. Tap on the floating action button (`+`) on the home page.
+1. Tap on the home page's floating action button (`+`).
 2. Enter the title and content of the note.
 3. Tap the save button to save the note.
 
@@ -70,5 +70,5 @@ This Flutter Notes App is designed to help you create, edit, and delete notes ef
 
 ### Emotion Detection and Song Recommendations
 
-1. As you type content in the note, emotions are detected automatically.
+1. Emotions are detected automatically when you type content in the note.
 2. Tap the "Recommend Songs" button to open YouTube with song recommendations based on the detected emotions.
