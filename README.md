@@ -72,3 +72,10 @@ This Flutter Journal App is designed to help you create, edit, and delete notes 
 
 1. Emotions are detected automatically when you type content in the note.
 2. Tap the "Recommend Songs" button to open YouTube with song recommendations based on the detected emotions.
+
+
+
+
+https://github.com/user-attachments/assets/f46f20d8-b06f-4d6b-9c34-262676a06fab
+
+
